@@ -11,6 +11,9 @@ namespace FocusAnchor
 {
     public partial class HoverForm : Form
     {
+        private enum Corner { TopLeft, TopRight, BottomLeft, BottomRight };
+        private Corner dockingLocation = Corner.BottomRight;
+
         // Code needed to hide the window from Alt+Tab.
         private const int GWL_EXSTYLE = ( -20 );
         private const int WS_EX_TOOLWINDOW = 0x80;
@@ -47,13 +50,23 @@ namespace FocusAnchor
             }
 
             Size = lblAction.Size;
-            Left = Screen.GetWorkingArea( this ).Width - Width;
-            Top = Screen.GetWorkingArea( this ).Height - Height;
+            Rectangle workingArea = Screen.GetWorkingArea( this );
+            Left = workingArea.Left;
+            Top = workingArea.Top;
+            if ( dockingLocation == Corner.TopRight || dockingLocation == Corner.BottomRight )
+                Left = Screen.GetWorkingArea( this ).Width - Width;
+            if ( dockingLocation == Corner.BottomLeft || dockingLocation == Corner.BottomRight )
+                Top = Screen.GetWorkingArea( this ).Height - Height;
         }
 
         private void lblAction_MouseClick( object sender, MouseEventArgs e )
         {
             nextToolStripMenuItem.Enabled = ( Program.nextActions.Count > 0 );
+            topleftToolStripMenuItem.Checked = ( dockingLocation == Corner.TopLeft );
+            toprightToolStripMenuItem.Checked = ( dockingLocation == Corner.TopRight );
+            bottomleftToolStripMenuItem.Checked = ( dockingLocation == Corner.BottomLeft );
+            bottomrightToolStripMenuItem.Checked = ( dockingLocation == Corner.BottomRight );
+
             switch ( e.Button )
             {
                 case MouseButtons.Left:
@@ -95,6 +108,30 @@ namespace FocusAnchor
         private void queueActionToolStripMenuItem1_Click( object sender, EventArgs e )
         {
             Program.EnqueueAction( );
+        }
+
+        private void bottomleftToolStripMenuItem_Click( object sender, EventArgs e )
+        {
+            dockingLocation = Corner.BottomLeft;
+            UpdateDisplay( );
+        }
+
+        private void bottomrightToolStripMenuItem_Click( object sender, EventArgs e )
+        {
+            dockingLocation = Corner.BottomRight;
+            UpdateDisplay( );
+        }
+
+        private void toprightToolStripMenuItem_Click( object sender, EventArgs e )
+        {
+            dockingLocation = Corner.TopRight;
+            UpdateDisplay( );
+        }
+
+        private void topleftToolStripMenuItem_Click( object sender, EventArgs e )
+        {
+            dockingLocation = Corner.TopLeft;
+            UpdateDisplay( );
         }
     }
 }
