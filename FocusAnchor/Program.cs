@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.IO;
+using FocusAnchor.Properties;
 
 namespace FocusAnchor
 {
     static class Program
     {
-        public static string currentAction = "click to set action...";
-        public static Queue<string> nextActions = new Queue<string>( );
-
         private static HoverForm hoverForm;
 
         /// <summary>
@@ -17,8 +15,7 @@ namespace FocusAnchor
         /// </summary>
         [STAThread]
         static void Main( )
-        {
-            RestoreFromFile( );
+        {        
             Application.EnableVisualStyles( );
             Application.SetCompatibleTextRenderingDefault( false );
 
@@ -28,74 +25,52 @@ namespace FocusAnchor
 
         public static void Quit( )
         {
+            Settings.Default.Save( );
             Application.Exit( );
         }
 
-        //=======================================================================//
+        /************************************************************************/
+        /*                      TASK MANAGEMENT                                 */
+        /************************************************************************/
 
         public static void NextAction( )
         {
-            currentAction = nextActions.Dequeue( );
+            if ( Settings.Default.NextActions.Count == 0 )
+                return;
+
+            Settings.Default.CurrentTask = Settings.Default.NextActions[0];
+            Settings.Default.NextActions.RemoveAt( 0 );
             hoverForm.UpdateDisplay( );
-            SaveToFile( );
+            Settings.Default.Save( );
         }
-        
+
         public static void ClearAction( )
         {
-            currentAction = "";
+            Settings.Default.CurrentTask = "";
             hoverForm.UpdateDisplay( );
-            SaveToFile( );
+            Settings.Default.Save( );
         }
 
         public static void PromptForAction( )
         {
-            currentAction = new SetActionForm( ).ShowMainDialog( );
+            Settings.Default.CurrentTask = new SetActionForm( ).ShowMainDialog( );
             hoverForm.UpdateDisplay( );
-            SaveToFile( );
+            Settings.Default.Save( );
         }
 
         public static void EnqueueAction( )
         {
-            nextActions.Enqueue( new SetActionForm( ).ShowQueueDialog( ) );
+            Settings.Default.NextActions.Add( new SetActionForm( ).ShowQueueDialog( ) );
             hoverForm.UpdateDisplay( );
-            SaveToFile( );
+            Settings.Default.Save( );
         }
-
 
         public static void PromptForActionList( )
         {
             new ToDoListForm( ).ShowDialog( );
             hoverForm.UpdateDisplay( );
-            SaveToFile( );
+            Settings.Default.Save( );
         }
-
-        //=======================================================================//
-
-        private const string DATA_FILE_NAME = "data.dat";
-        private static void RestoreFromFile( )
-        {
-            if ( !File.Exists( DATA_FILE_NAME ) )
-                return;
-
-            BinaryReader reader = new BinaryReader( new FileStream( DATA_FILE_NAME, FileMode.Open ) );
-            currentAction = reader.ReadString( );
-            for ( long i = 0, num = reader.ReadInt64( ); i < num; i++ )
-                nextActions.Enqueue( reader.ReadString( ) );
-            reader.Close( );
-        }
-
-        private static void SaveToFile( )
-        {
-            BinaryWriter writer = new BinaryWriter( new FileStream( DATA_FILE_NAME, FileMode.Create ) );
-            writer.Write( currentAction );
-            writer.Write( (Int64) nextActions.Count );
-            foreach ( String action in nextActions )
-                writer.Write( action );
-            writer.Close( );
-        }
-
-
-
 
     }
 }

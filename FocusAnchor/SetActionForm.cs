@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using FocusAnchor.Properties;
 
 namespace FocusAnchor
 {
@@ -13,7 +14,7 @@ namespace FocusAnchor
         public SetActionForm( )
         {
             InitializeComponent( );
-            txtAction.Text = Program.currentAction;
+            txtAction.Text = Settings.Default.CurrentTask;
         }
 
         public string ShowMainDialog( )
