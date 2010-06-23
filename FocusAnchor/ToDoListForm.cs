@@ -34,7 +34,10 @@ namespace FocusAnchor
                 if ( lineToAdd.Length > 0 )
                     Settings.Default.NextActions.Add( lineToAdd );
             }
+            Settings.Default.Save( );
 
+            if ( Settings.Default.CurrentTask.Length <= 0 )
+                Program.NextAction( );
         }
     }
 }

@@ -42,13 +42,21 @@ namespace FocusAnchor
         /// </summary>
         public void UpdateDisplay( )
         {
+            taskIcon.Visible = doneTimer.Enabled;
             lblAction.Text = Settings.Default.CurrentTask;
+            lblAction.Left = taskIcon.Visible ? 38 : 0;            
+            doneToolStripMenuItem.Enabled = ( Settings.Default.CurrentTask.Length > 0 ) && !doneTimer.Enabled;
 
             // Style the form differently if there's no set task.
-            if ( Settings.Default.CurrentTask.Length <= 0 )
+            if ( doneTimer.Enabled )
             {
-                lblAction.Text = "(none)";
-                BackColor = System.Drawing.Color.IndianRed;
+                BackColor = Color.Cornsilk;
+                lblAction.Text = "completed!";
+            }
+            else if ( Settings.Default.CurrentTask.Length <= 0 )
+            {
+                lblAction.Text = "click to set task...";
+                BackColor = System.Drawing.Color.Gainsboro;
             }
             else
                 BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
@@ -62,7 +70,17 @@ namespace FocusAnchor
         private void Relocate( )
         {
             Rectangle workingArea = Screen.GetWorkingArea( this );
-            this.Size = lblAction.Size;
+
+            if ( tbTaskEntry.Visible )
+            {
+                tbTaskEntry.Left = lblAction.Left;
+                tbTaskEntry.Width = Math.Max( 250, lblAction.Width );
+                this.Width = tbTaskEntry.Left + tbTaskEntry.Width;
+            }
+            else
+                this.Width = lblAction.Width + lblAction.Left;
+
+            this.Height = lblAction.Height;
             this.Left = workingArea.Left;
             this.Top = workingArea.Top;
             if ( dockingLocation == Corner.TopRight || dockingLocation == Corner.BottomRight )
@@ -78,7 +96,6 @@ namespace FocusAnchor
         private void ShowContextMenu( Point location )
         {
             // Update the context menu's items.
-            nextToolStripMenuItem.Enabled = ( Settings.Default.NextActions.Count > 0 );
             topleftToolStripMenuItem.Checked = ( dockingLocation == Corner.TopLeft );
             toprightToolStripMenuItem.Checked = ( dockingLocation == Corner.TopRight );
             bottomleftToolStripMenuItem.Checked = ( dockingLocation == Corner.BottomLeft );
@@ -99,7 +116,15 @@ namespace FocusAnchor
             switch ( e.Button )
             {
                 case MouseButtons.Left:
-                    Program.PromptForAction( );
+                    SetInputMode( true );
+                    break;
+                case MouseButtons.Middle:
+                    if ( doneToolStripMenuItem.Enabled )
+                    {
+                        taskIcon.Show( );
+                        doneTimer.Start( );
+                        UpdateDisplay( );
+                    }
                     break;
                 case MouseButtons.Right:
                     ShowContextMenu( e.Location );
@@ -141,11 +166,6 @@ namespace FocusAnchor
             Program.NextAction( );
         }
 
-        private void queueActionToolStripMenuItem1_Click( object sender, EventArgs e )
-        {
-            Program.EnqueueAction( );
-        }
-
         private void bottomleftToolStripMenuItem_Click( object sender, EventArgs e )
         {
             dockingLocation = Corner.BottomLeft;
@@ -168,6 +188,94 @@ namespace FocusAnchor
         {
             dockingLocation = Corner.TopLeft;
             UpdateDisplay( );
+        }
+
+        private void queueActionToolStripMenuItem1_Click_1( object sender, EventArgs e )
+        {
+            Program.EnqueueAction( );
+        }
+
+        private void nextToolStripMenuItem_Click_1( object sender, EventArgs e )
+        {
+            Program.NextAction( );
+        }
+
+        private void manageToolStripMenuItem_Click_1( object sender, EventArgs e )
+        {
+            Program.PromptForActionList( );
+        }
+
+        private void doneToolStripMenuItem_Click( object sender, EventArgs e )
+        {
+            doneTimer.Start( );
+            UpdateDisplay( );
+        }
+
+        private void doneTimer_Tick( object sender, EventArgs e )
+        {
+            doneTimer.Stop( );
+            Program.NextAction( );            
+        }
+
+        private void tbTaskEntry_KeyDown( object sender, KeyEventArgs e )
+        {
+            if ( e.KeyCode == Keys.Enter )
+            {
+                // If shift was pressed, just enqueue the task.
+                if ( e.Modifiers == Keys.Shift )
+                {
+                    Settings.Default.NextActions.Add( tbTaskEntry.Text );
+                    tbTaskEntry.Text = "";
+                }
+                else
+                {
+                    // Otherwise, make it our current job.
+                    if ( tbTaskEntry.Text.Length > 0 )
+                    {
+                        Settings.Default.CurrentTask = tbTaskEntry.Text;
+                        Settings.Default.Save( );
+                    }
+                    SetInputMode( false );
+                }
+            }
+            else if ( e.KeyData == Keys.Escape )
+                SetInputMode( false );
+        }
+
+
+        private void tbTaskEntry_MouseClick( object sender, MouseEventArgs e )
+        {
+            if ( e.Button == MouseButtons.Right )
+                ShowContextMenu( e.Location );
+        }
+
+        private void tbTaskEntry_Leave( object sender, EventArgs e )
+        {
+            SetInputMode( false );
+        }
+
+        private void SetInputMode( bool enabled )
+        {
+            tbTaskEntry.Visible = enabled;
+            lblAction.Visible = !tbTaskEntry.Visible;
+
+            if ( enabled )
+            {
+                Settings.Default.EnterTaskCount++;
+                if ( Settings.Default.EnterTaskCount == 3 )
+                    tipBalloon.Show( "Press shift-enter to add a task to your list (to do later).", this, this.Location );
+            }
+            else
+                tipBalloon.Hide( this );
+
+            tbTaskEntry.Text = "";
+            UpdateDisplay( );
+            tbTaskEntry.Focus( );
+        }
+
+        private void HoverForm_Deactivate( object sender, EventArgs e )
+        {
+            SetInputMode( false );
         }
     }
 }

@@ -36,10 +36,12 @@ namespace FocusAnchor
         public static void NextAction( )
         {
             if ( Settings.Default.NextActions.Count == 0 )
-                return;
-
-            Settings.Default.CurrentTask = Settings.Default.NextActions[0];
-            Settings.Default.NextActions.RemoveAt( 0 );
+                Settings.Default.CurrentTask = "";
+            else
+            {
+                Settings.Default.CurrentTask = Settings.Default.NextActions[0];
+                Settings.Default.NextActions.RemoveAt( 0 );
+            }
             hoverForm.UpdateDisplay( );
             Settings.Default.Save( );
         }

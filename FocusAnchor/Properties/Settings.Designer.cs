@@ -59,5 +59,17 @@ namespace FocusAnchor.Properties {
                 this["NextActions"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int EnterTaskCount {
+            get {
+                return ((int)(this["EnterTaskCount"]));
+            }
+            set {
+                this["EnterTaskCount"] = value;
+            }
+        }
     }
 }

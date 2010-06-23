@@ -9,6 +9,7 @@
 //------------------------------------------------------------------------------
 
 namespace FocusAnchor.Properties {
+    using System;
     
     
     /// <summary>
@@ -37,7 +38,7 @@ namespace FocusAnchor.Properties {
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
-                if ((resourceMan == null)) {
+                if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FocusAnchor.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
@@ -56,6 +57,27 @@ namespace FocusAnchor.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        internal static System.Drawing.Bitmap alacarte {
+            get {
+                object obj = ResourceManager.GetObject("alacarte", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap alacarte_16 {
+            get {
+                object obj = ResourceManager.GetObject("alacarte_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap tick_32 {
+            get {
+                object obj = ResourceManager.GetObject("tick_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

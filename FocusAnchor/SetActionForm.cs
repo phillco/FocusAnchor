@@ -29,10 +29,5 @@ namespace FocusAnchor
             this.label1.Text = "New action:";
             return ShowMainDialog( );
         }
-
-        private void btnSet_Click( object sender, EventArgs e )
-        {
-            
-        }
     }
 }
