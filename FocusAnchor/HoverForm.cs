@@ -41,17 +41,17 @@ namespace FocusAnchor
         /// Updates the form to reflect the current task.
         /// </summary>
         public void UpdateDisplay( )
-        {            
+        {
             taskIcon.Visible = doneTimer.Enabled;
             lblAction.Text = Settings.Default.CurrentTask;
-            lblAction.Left = taskIcon.Visible ? 38 : 0;            
+            lblAction.Left = taskIcon.Visible ? 38 : 0;
             doneToolStripMenuItem.Enabled = ( Settings.Default.CurrentTask.Length > 0 ) && !doneTimer.Enabled;
 
             if ( Settings.Default.LockdownReleaseTime.CompareTo( DateTime.Now ) > 0 )
             {
                 lockdownTimer.Enabled = true;
                 TimeSpan timeLeft = Settings.Default.LockdownReleaseTime.Subtract( DateTime.Now );
-                lblAction.Text += " (" + timeLeft.Minutes + ":" + timeLeft.Seconds.ToString("00") + ")";
+                lblAction.Text += " (" + timeLeft.Minutes + ":" + timeLeft.Seconds.ToString( "00" ) + ")";
             }
             else
                 lockdownTimer.Enabled = false;
@@ -65,7 +65,7 @@ namespace FocusAnchor
             else if ( Settings.Default.CurrentTask.Length <= 0 )
             {
                 lblAction.Text = "click to set task...";
-                BackColor = System.Drawing.Color.Gainsboro;
+                BackColor = System.Drawing.Color.LightGray;
             }
             else
                 BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
@@ -128,12 +128,7 @@ namespace FocusAnchor
                     SetInputMode( true );
                     break;
                 case MouseButtons.Middle:
-                    if ( doneToolStripMenuItem.Enabled )
-                    {
-                        taskIcon.Show( );
-                        doneTimer.Start( );
-                        UpdateDisplay( );
-                    }
+                    completeTask( );
                     break;
                 case MouseButtons.Right:
                     ShowContextMenu( e.Location );
@@ -149,6 +144,17 @@ namespace FocusAnchor
         /************************************************************************/
         /*                     RIGHT-CLICK MENU HANDLERS                        */
         /************************************************************************/
+
+        private void completeTask( )
+        {
+            if ( doneToolStripMenuItem.Enabled )
+            {
+                Settings.Default.LockdownReleaseTime = DateTime.MinValue;
+                Settings.Default.Save( );
+                doneTimer.Start( );
+                UpdateDisplay( );
+            }
+        }
 
         private void exitToolStripMenuItem_Click( object sender, EventArgs e )
         {
@@ -216,14 +222,14 @@ namespace FocusAnchor
 
         private void doneToolStripMenuItem_Click( object sender, EventArgs e )
         {
-            doneTimer.Start( );
-            UpdateDisplay( );
+            completeTask( );
         }
 
         private void doneTimer_Tick( object sender, EventArgs e )
         {
             doneTimer.Stop( );
-            Program.NextAction( );            
+            Program.NextAction( );
+            UpdateDisplay( );
         }
 
         private void tbTaskEntry_KeyDown( object sender, KeyEventArgs e )
