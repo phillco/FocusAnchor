@@ -33,6 +33,9 @@
             this.lblAction = new System.Windows.Forms.Label( );
             this.rightClickMenu = new System.Windows.Forms.ContextMenuStrip( this.components );
             this.setActionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem( );
+            this.doneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem( );
+            this.manageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem( );
+            this.lockdownModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem( );
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator( );
             this.locationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem( );
             this.topleftToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem( );
@@ -45,8 +48,7 @@
             this.tbTaskEntry = new System.Windows.Forms.TextBox( );
             this.tipBalloon = new System.Windows.Forms.ToolTip( this.components );
             this.taskIcon = new System.Windows.Forms.PictureBox( );
-            this.doneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem( );
-            this.manageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem( );
+            this.lockdownTimer = new System.Windows.Forms.Timer( this.components );
             this.rightClickMenu.SuspendLayout( );
             ( (System.ComponentModel.ISupportInitialize) ( this.taskIcon ) ).BeginInit( );
             this.SuspendLayout( );
@@ -68,12 +70,13 @@
             this.setActionToolStripMenuItem,
             this.doneToolStripMenuItem,
             this.manageToolStripMenuItem,
+            this.lockdownModeToolStripMenuItem,
             this.toolStripSeparator3,
             this.locationToolStripMenuItem,
             this.toolStripSeparator2,
             this.exitToolStripMenuItem} );
             this.rightClickMenu.Name = "rightClickMenu";
-            this.rightClickMenu.Size = new System.Drawing.Size( 174, 126 );
+            this.rightClickMenu.Size = new System.Drawing.Size( 174, 148 );
             // 
             // setActionToolStripMenuItem
             // 
@@ -82,6 +85,30 @@
             this.setActionToolStripMenuItem.Size = new System.Drawing.Size( 173, 22 );
             this.setActionToolStripMenuItem.Text = "Set current task...";
             this.setActionToolStripMenuItem.Click += new System.EventHandler( this.setActionToolStripMenuItem_Click );
+            // 
+            // doneToolStripMenuItem
+            // 
+            this.doneToolStripMenuItem.Image = global::FocusAnchor.Properties.Resources.tick_32;
+            this.doneToolStripMenuItem.Name = "doneToolStripMenuItem";
+            this.doneToolStripMenuItem.Size = new System.Drawing.Size( 173, 22 );
+            this.doneToolStripMenuItem.Text = "Done";
+            this.doneToolStripMenuItem.Click += new System.EventHandler( this.doneToolStripMenuItem_Click );
+            // 
+            // manageToolStripMenuItem
+            // 
+            this.manageToolStripMenuItem.Image = global::FocusAnchor.Properties.Resources.alacarte_16;
+            this.manageToolStripMenuItem.Name = "manageToolStripMenuItem";
+            this.manageToolStripMenuItem.Size = new System.Drawing.Size( 173, 22 );
+            this.manageToolStripMenuItem.Text = "Task list...";
+            this.manageToolStripMenuItem.Click += new System.EventHandler( this.manageToolStripMenuItem_Click_1 );
+            // 
+            // lockdownModeToolStripMenuItem
+            // 
+            this.lockdownModeToolStripMenuItem.Image = global::FocusAnchor.Properties.Resources.danger_16;
+            this.lockdownModeToolStripMenuItem.Name = "lockdownModeToolStripMenuItem";
+            this.lockdownModeToolStripMenuItem.Size = new System.Drawing.Size( 173, 22 );
+            this.lockdownModeToolStripMenuItem.Text = "Lockdown mode";
+            this.lockdownModeToolStripMenuItem.Click += new System.EventHandler( this.lockdownModeToolStripMenuItem_Click );
             // 
             // toolStripSeparator3
             // 
@@ -174,21 +201,10 @@
             this.taskIcon.TabStop = false;
             this.taskIcon.Visible = false;
             // 
-            // doneToolStripMenuItem
+            // lockdownTimer
             // 
-            this.doneToolStripMenuItem.Image = global::FocusAnchor.Properties.Resources.tick_32;
-            this.doneToolStripMenuItem.Name = "doneToolStripMenuItem";
-            this.doneToolStripMenuItem.Size = new System.Drawing.Size( 173, 22 );
-            this.doneToolStripMenuItem.Text = "Done";
-            this.doneToolStripMenuItem.Click += new System.EventHandler( this.doneToolStripMenuItem_Click );
-            // 
-            // manageToolStripMenuItem
-            // 
-            this.manageToolStripMenuItem.Image = global::FocusAnchor.Properties.Resources.alacarte_16;
-            this.manageToolStripMenuItem.Name = "manageToolStripMenuItem";
-            this.manageToolStripMenuItem.Size = new System.Drawing.Size( 173, 22 );
-            this.manageToolStripMenuItem.Text = "Task list...";
-            this.manageToolStripMenuItem.Click += new System.EventHandler( this.manageToolStripMenuItem_Click_1 );
+            this.lockdownTimer.Interval = 1000;
+            this.lockdownTimer.Tick += new System.EventHandler( this.lockdownTimer_Tick );
             // 
             // HoverForm
             // 
@@ -235,5 +251,7 @@
         private System.Windows.Forms.PictureBox taskIcon;
         private System.Windows.Forms.TextBox tbTaskEntry;
         private System.Windows.Forms.ToolTip tipBalloon;
+        private System.Windows.Forms.ToolStripMenuItem lockdownModeToolStripMenuItem;
+        private System.Windows.Forms.Timer lockdownTimer;
     }
 }

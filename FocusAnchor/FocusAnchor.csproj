@@ -57,6 +57,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LockdownForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LockdownForm.Designer.cs">
+      <DependentUpon>LockdownForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ToDoListForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -77,6 +83,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="LockdownForm.resx">
+      <DependentUpon>LockdownForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ToDoListForm.resx">
       <DependentUpon>ToDoListForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -115,6 +124,8 @@
     <None Include="icons\tick_32.png" />
     <None Include="icons\alacarte.png" />
     <None Include="icons\alacarte_16.png" />
+    <None Include="icons\danger_16.png" />
+    <None Include="icons\danger_32.png" />
     <Content Include="README.txt" />
   </ItemGroup>
   <ItemGroup>

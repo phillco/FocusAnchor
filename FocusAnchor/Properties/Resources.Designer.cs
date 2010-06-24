@@ -74,6 +74,20 @@ namespace FocusAnchor.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap danger_16 {
+            get {
+                object obj = ResourceManager.GetObject("danger_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap danger_32 {
+            get {
+                object obj = ResourceManager.GetObject("danger_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap tick_32 {
             get {
                 object obj = ResourceManager.GetObject("tick_32", resourceCulture);

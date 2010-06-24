@@ -71,5 +71,16 @@ namespace FocusAnchor.Properties {
                 this["EnterTaskCount"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.DateTime LockdownReleaseTime {
+            get {
+                return ((global::System.DateTime)(this["LockdownReleaseTime"]));
+            }
+            set {
+                this["LockdownReleaseTime"] = value;
+            }
+        }
     }
 }

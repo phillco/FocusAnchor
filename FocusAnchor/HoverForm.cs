@@ -41,11 +41,20 @@ namespace FocusAnchor
         /// Updates the form to reflect the current task.
         /// </summary>
         public void UpdateDisplay( )
-        {
+        {            
             taskIcon.Visible = doneTimer.Enabled;
             lblAction.Text = Settings.Default.CurrentTask;
             lblAction.Left = taskIcon.Visible ? 38 : 0;            
             doneToolStripMenuItem.Enabled = ( Settings.Default.CurrentTask.Length > 0 ) && !doneTimer.Enabled;
+
+            if ( Settings.Default.LockdownReleaseTime.CompareTo( DateTime.Now ) > 0 )
+            {
+                lockdownTimer.Enabled = true;
+                TimeSpan timeLeft = Settings.Default.LockdownReleaseTime.Subtract( DateTime.Now );
+                lblAction.Text += " (" + timeLeft.Minutes + ":" + timeLeft.Seconds.ToString("00") + ")";
+            }
+            else
+                lockdownTimer.Enabled = false;
 
             // Style the form differently if there's no set task.
             if ( doneTimer.Enabled )
@@ -276,6 +285,16 @@ namespace FocusAnchor
         private void HoverForm_Deactivate( object sender, EventArgs e )
         {
             SetInputMode( false );
+        }
+
+        private void lockdownModeToolStripMenuItem_Click( object sender, EventArgs e )
+        {
+            new LockdownForm( ).ShowDialog( this );
+        }
+
+        private void lockdownTimer_Tick( object sender, EventArgs e )
+        {
+            UpdateDisplay( );
         }
     }
 }

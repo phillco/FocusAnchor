@@ -42,36 +42,36 @@ namespace FocusAnchor
                 Settings.Default.CurrentTask = Settings.Default.NextActions[0];
                 Settings.Default.NextActions.RemoveAt( 0 );
             }
-            hoverForm.UpdateDisplay( );
+        }
+
+        public static void UpdateSettings()
+        {
             Settings.Default.Save( );
+            hoverForm.UpdateDisplay( );            
         }
 
         public static void ClearAction( )
         {
             Settings.Default.CurrentTask = "";
-            hoverForm.UpdateDisplay( );
-            Settings.Default.Save( );
+            UpdateSettings( );
         }
 
         public static void PromptForAction( )
         {
             Settings.Default.CurrentTask = new SetActionForm( ).ShowMainDialog( );
-            hoverForm.UpdateDisplay( );
-            Settings.Default.Save( );
+            UpdateSettings( );
         }
 
         public static void EnqueueAction( )
         {
             Settings.Default.NextActions.Add( new SetActionForm( ).ShowQueueDialog( ) );
-            hoverForm.UpdateDisplay( );
-            Settings.Default.Save( );
+            UpdateSettings( );
         }
 
         public static void PromptForActionList( )
         {
             new ToDoListForm( ).ShowDialog( );
-            hoverForm.UpdateDisplay( );
-            Settings.Default.Save( );
+            UpdateSettings( );
         }
 
     }
